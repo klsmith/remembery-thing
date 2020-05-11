@@ -1,5 +1,5 @@
 //
-// Add control for localStorage to Elm app
+// Add control ports for localStorage to Elm app
 //
 function addLocalStoragePorts(elmApp) {
 

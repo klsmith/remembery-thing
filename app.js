@@ -5184,7 +5184,7 @@ var $elm$browser$Browser$document = _Browser_document;
 var $author$project$Main$Loading = {$: 'Loading'};
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $author$project$Ports$LocalStorage$addLocalStorageListener = _Platform_outgoingPort('addLocalStorageListener', $elm$json$Json$Encode$string);
-var $author$project$Main$storageKey = 'remember-test-key';
+var $author$project$Main$storageKey = 'remembery-thing-test-key';
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		$author$project$Main$Loading,
