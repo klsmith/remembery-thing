@@ -1,15 +1,13 @@
 module Main exposing (..)
 
-import Browser exposing (element)
-import Html exposing (Html, text)
-
-
-
--- MAIN
+import Browser
+import Element exposing (..)
+import Element.Input as Input
+import Ports.LocalStorage exposing (..)
 
 
 main =
-    Browser.element
+    Browser.document
         { init = init
         , subscriptions = subscriptions
         , update = update
@@ -17,53 +15,122 @@ main =
         }
 
 
-
--- MODEL
-
-
 type Model
-    = NoModel
-
-
-
--- MSG
+    = Loading
+    | Ready String
 
 
 type Msg
-    = NoMsg
+    = OnTextBoxChange String
+    | OnStorageChange
+        { key : String
+        , value : Maybe String
+        }
 
 
-
--- INIT
+storageKey : String
+storageKey =
+    "remember-test-key"
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( NoModel, Cmd.none )
-
-
-
--- UPDATE
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    ( model, Cmd.none )
-
-
-
--- SUBSCRIPTIONS
+    ( Loading
+    , addLocalStorageListener storageKey
+    )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    onLocalStorageChange OnStorageChange
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case model of
+        Loading ->
+            case msg of
+                OnStorageChange storage ->
+                    case storage.value of
+                        Just storageValue ->
+                            ( Ready storageValue
+                            , Cmd.none
+                            )
 
---VIEW
+                        Nothing ->
+                            ( Ready ""
+                            , saveToLocalStorage
+                                { key = storageKey
+                                , value = ""
+                                }
+                            )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        Ready value ->
+            case msg of
+                OnTextBoxChange newValue ->
+                    ( Ready newValue
+                    , saveToLocalStorage
+                        { key = storageKey
+                        , value = newValue
+                        }
+                    )
+
+                OnStorageChange storage ->
+                    case storage.value of
+                        Just storageValue ->
+                            ( Ready storageValue
+                            , Cmd.none
+                            )
+
+                        Nothing ->
+                            ( Ready ""
+                            , saveToLocalStorage
+                                { key = storageKey
+                                , value = ""
+                                }
+                            )
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
-    text "Hello World"
+    { title = "I remember whatever you tell me..."
+    , body =
+        [ layout [] <|
+            column [ centerX, centerY ]
+                [ el [ centerX, centerY ] <|
+                    text "I remember whatever you tell me..."
+                , case model of
+                    Loading ->
+                        loadingView
+
+                    Ready record ->
+                        readyView record
+                ]
+        ]
+    }
+
+
+loadingView : Element Msg
+loadingView =
+    el [ centerX, centerY ] <|
+        text "LOADING..."
+
+
+readyView : String -> Element Msg
+readyView value =
+    el
+        [ centerX
+        , centerY
+        , padding 12
+        , spacing 12
+        ]
+    <|
+        Input.text [ centerX ]
+            { label = Input.labelHidden "textbox"
+            , onChange = OnTextBoxChange
+            , placeholder = Nothing
+            , text = value
+            }
