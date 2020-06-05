@@ -5255,48 +5255,34 @@ var $author$project$Ports$LocalStorage$saveToLocalStorage = _Platform_outgoingPo
 					$elm$json$Json$Encode$string($.value))
 				]));
 	});
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		if (model.$ === 'Loading') {
-			if (msg.$ === 'OnStorageChange') {
-				var storage = msg.a;
-				var _v2 = storage.value;
-				if (_v2.$ === 'Just') {
-					var storageValue = _v2.a;
-					return _Utils_Tuple2(
-						$author$project$Main$Ready(storageValue),
-						$elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(
-						$author$project$Main$Ready(''),
-						$author$project$Ports$LocalStorage$saveToLocalStorage(
-							{key: $author$project$Main$storageKey, value: ''}));
-				}
-			} else {
-				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-			}
+		var _v0 = _Utils_Tuple2(msg, model);
+		if (_v0.a.$ === 'OnStorageChange') {
+			var storage = _v0.a.a;
+			return _Utils_Tuple2(
+				$author$project$Main$Ready(
+					A2($elm$core$Maybe$withDefault, '', storage.value)),
+				$elm$core$Platform$Cmd$none);
 		} else {
-			var value = model.a;
-			if (msg.$ === 'OnTextBoxChange') {
-				var newValue = msg.a;
+			if (_v0.b.$ === 'Ready') {
+				var newValue = _v0.a.a;
+				var value = _v0.b.a;
 				return _Utils_Tuple2(
 					$author$project$Main$Ready(newValue),
 					$author$project$Ports$LocalStorage$saveToLocalStorage(
 						{key: $author$project$Main$storageKey, value: newValue}));
 			} else {
-				var storage = msg.a;
-				var _v4 = storage.value;
-				if (_v4.$ === 'Just') {
-					var storageValue = _v4.a;
-					return _Utils_Tuple2(
-						$author$project$Main$Ready(storageValue),
-						$elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(
-						$author$project$Main$Ready(''),
-						$author$project$Ports$LocalStorage$saveToLocalStorage(
-							{key: $author$project$Main$storageKey, value: ''}));
-				}
+				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			}
 		}
 	});
@@ -5506,15 +5492,6 @@ var $mdgriffith$elm_ui$Internal$Model$transformClass = function (transform) {
 				'tfrm-' + ($mdgriffith$elm_ui$Internal$Model$floatClass(tx) + ('-' + ($mdgriffith$elm_ui$Internal$Model$floatClass(ty) + ('-' + ($mdgriffith$elm_ui$Internal$Model$floatClass(tz) + ('-' + ($mdgriffith$elm_ui$Internal$Model$floatClass(sx) + ('-' + ($mdgriffith$elm_ui$Internal$Model$floatClass(sy) + ('-' + ($mdgriffith$elm_ui$Internal$Model$floatClass(sz) + ('-' + ($mdgriffith$elm_ui$Internal$Model$floatClass(ox) + ('-' + ($mdgriffith$elm_ui$Internal$Model$floatClass(oy) + ('-' + ($mdgriffith$elm_ui$Internal$Model$floatClass(oz) + ('-' + $mdgriffith$elm_ui$Internal$Model$floatClass(angle))))))))))))))))))));
 	}
 };
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
 var $mdgriffith$elm_ui$Internal$Model$getStyleName = function (style) {
 	switch (style.$) {
 		case 'Shadows':
